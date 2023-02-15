@@ -113,7 +113,8 @@ So let's do that simply by using the `=` (single this time, note) to assign a na
 
 srqflights %>% 
   group_by(carrier, flight, origin) %>% 
-  summarise(count = n())
+  summarise(count = n()) %>%
+  arrange(desc(count))
 
 ```
 
@@ -143,7 +144,7 @@ We can answer that by instead of counting, using another function withing `summa
 srqflights %>% 
   filter(month == 1) %>% 
   group_by(carrier, flight, origin) %>% 
-  summarise(avg_delay = mean(dep_delay))
+  summarise(avg_delay = mean(dep_delay)) # avg delay time for each category
 
 
 ```
@@ -161,7 +162,13 @@ So we can easily handle that by adding an argument to calculate the average rega
 srqflights %>% 
   filter(month == 1) %>% 
   group_by(carrier, flight, origin) %>% 
-  summarise(avg_delay = mean(dep_delay, na.rm = TRUE))
+  summarise(avg_delay = mean(dep_delay, na.rm = TRUE)) # remove NAs
+
+# we can change from mean to median
+srqflights %>% 
+  filter(month == 1) %>% 
+  group_by(carrier, flight, origin) %>% 
+  summarise(avg_delay = median(dep_delay, na.rm = TRUE))
 
 ```
 
@@ -213,14 +220,27 @@ We now have a lot more information at our fingertips than we did a few minutes a
 ## More Practice Together
 
 ```{r}
+flights = nycflights13::flights
 
-
+flights %>%
+  filter(dest=="DCA") %>%
+  group_by(carrier) %>%
+  summarize(avg_delay = median(dep_delay, na.rm = TRUE))
 
 ```
 
 
 ```{r}
 
+# What percentage of flights are delayed? 
+
+srqflights = srqflights %>%
+  mutate(is_delay = if_else(dep_delay > 0, "YES", "NO"))
+
+srqflights %>%
+  group_by(is_delay) %>%
+  summarize(count = n()) %>%
+  mutate(pct = count / sum(count) * 100)
 
 
 ```

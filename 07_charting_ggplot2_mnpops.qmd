@@ -20,7 +20,7 @@ library(ggthemes)
 library(esquisse)
 
 #import data
-county_pop <-  read_xlsx('county_pop.xlsx') %>% 
+county_pop <-  read_xlsx('data/county_pop.xlsx') %>% 
   clean_names()
 
 
@@ -69,6 +69,7 @@ Sorting by values and changing colors.
 Color is for the outline; fill is inside the bars.
 
 ```{r}
+# REORDER: reorder geography based on population estimate number 
 
 ggplot(metro_pop, aes(x = reorder(geography, pop_estimate2016), y = pop_estimate2016)) + 
   geom_col(color = "black", fill = "red") +
@@ -143,6 +144,23 @@ ggplot(metro_pop, aes(x = reorder(geography, pop_estimate2016), y = pop_estimate
   theme_fivethirtyeight()
 ```
 
+```{r}
+DCA_delays = flights %>%
+  filter(dest=="DCA") %>%
+  filter(dep_delay >= 0) %>%
+  group_by(carrier) %>%
+  summarize(avg_delay = median(dep_delay, na.rm = TRUE))
+
+ggplot(DCA_delays, aes(x = carrier, y = avg_delay)) + 
+  geom_col(color = "#9ebcda", fill = "#9ebcda") +
+  coord_flip() +
+  scale_y_continuous(name = "Carrier", labels = scales::comma) +
+  scale_x_discrete(name = "Delay Time") +
+  labs(title = "Median Delay Time for Flights to DCA", 
+       subtitle = "2013",
+       caption = "Source: U.S. Census Bureau") +
+  theme_fivethirtyeight()
+```
 
 
 # Part 2
