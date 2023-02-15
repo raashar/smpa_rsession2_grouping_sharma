@@ -145,6 +145,9 @@ ggplot(metro_pop, aes(x = reorder(geography, pop_estimate2016), y = pop_estimate
 ```
 
 ```{r}
+
+# Trying out ggplot
+
 DCA_delays = flights %>%
   filter(dest=="DCA") %>%
   filter(dep_delay >= 0) %>%
